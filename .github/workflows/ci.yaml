@@ -49,6 +49,10 @@ jobs:
           mkdir build
           cp app.py build/
           cp requirements.txt build/
+      - name: Verify build
+        run: |
+          echo "Build contents:"
+          ls -la build
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
