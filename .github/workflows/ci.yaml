@@ -95,3 +95,24 @@ jobs:
           with:
             name: python-app
             path: build/
+  deploy:
+    name: Deploy to AWS EC2
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::537621751610:role/github-actions-deploy-role
+          aws-region: ap-south-2
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
