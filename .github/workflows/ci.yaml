@@ -25,3 +25,7 @@ jobs:
 
       - name: Run tests
         run: pytest
+      - name: Build application
+        run: |
+         mkdir build
+         cp app.py build/
