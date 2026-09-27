@@ -105,29 +105,9 @@ jobs:
       contents: read
 
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Debug OIDC claims
-        run: |
-          TOKEN=$(curl -sS \
-            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=sts.amazonaws.com" \
-            | jq -r '.value')
-
-          PAYLOAD=$(echo "$TOKEN" | cut -d. -f2 | tr '_-' '/+' | base64 -d 2>/dev/null)
-
-          echo "Repository:"
-          echo "$PAYLOAD" | jq -r '.repository'
-
-          echo "Ref:"
-          echo "$PAYLOAD" | jq -r '.ref'
-
-          echo "Subject:"
-          echo "$PAYLOAD" | jq -r '.sub'
-
-          echo "Audience:"
-          echo "$PAYLOAD" | jq -r '.aud'
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
@@ -137,3 +117,12 @@ jobs:
 
       - name: Verify AWS identity
         run: aws sts get-caller-identity
+
+      - name: Send deployment command to EC2
+        run: |
+          aws ssm send-command \
+            --instance-ids i-093ebb9a826f30272 \
+            --document-name "AWS-RunShellScript" \
+            --parameters 'commands=["echo GitHub Actions deployment successful > /tmp/deployment.txt"]' \
+            --comment "GitHub Actions deployment test" \
+            --region ap-south-2
