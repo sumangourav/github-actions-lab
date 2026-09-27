@@ -121,7 +121,7 @@ jobs:
       - name: Send deployment command to EC2
         run: |
           aws ssm send-command \
-            --instance-ids i-093ebb9a826f30272 \
+            --instance-ids i-0a40f9d51c9146e53 \
             --document-name "AWS-RunShellScript" \
             --parameters 'commands=["echo GitHub Actions deployment successful > /tmp/deployment.txt"]' \
             --comment "GitHub Actions deployment test" \
