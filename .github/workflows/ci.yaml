@@ -117,13 +117,17 @@ jobs:
 
           PAYLOAD=$(echo "$TOKEN" | cut -d. -f2 | tr '_-' '/+' | base64 -d 2>/dev/null)
 
-          echo "$PAYLOAD" | jq '{
-            iss,
-            aud,
-            sub,
-            repository,
-            ref
-          }'
+          echo "Repository:"
+          echo "$PAYLOAD" | jq -r '.repository'
+
+          echo "Ref:"
+          echo "$PAYLOAD" | jq -r '.ref'
+
+          echo "Subject:"
+          echo "$PAYLOAD" | jq -r '.sub'
+
+          echo "Audience:"
+          echo "$PAYLOAD" | jq -r '.aud'
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
