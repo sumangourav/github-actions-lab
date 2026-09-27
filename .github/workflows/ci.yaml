@@ -42,7 +42,7 @@ jobs:
           path: test-result.txt
 
 
-    build:
+  build:
       name: Build Application
 
       needs: test
