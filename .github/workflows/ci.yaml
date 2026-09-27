@@ -61,15 +61,20 @@ jobs:
         run: |
           echo "Downloaded test artifact:"
           cat test-result.txt
+
       - name: Build application
         run: |
           mkdir build
           cp app.py build/
           cp requirements.txt build/
+          echo "Build created from commit: $GITHUB_SHA" > build/build-info.txt
+
       - name: Verify build
         run: |
           echo "Build contents:"
           ls -la build
+          echo "Build information:"
+          cat build/build-info.txt
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
