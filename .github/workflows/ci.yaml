@@ -29,6 +29,7 @@ jobs:
         run: |
          mkdir build
          cp app.py build/
+         cp requirements.txt build/
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
