@@ -35,6 +35,11 @@ jobs:
         run: |
           echo "Tests completed successfully" > test-result.txt
           echo "This file was created in Test Job" >> test-result.txt
+      - name: Upload test artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-result
+          path: test-result.txt
 
 
   build:
@@ -48,7 +53,14 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v4
-
+      - name: Download test artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: test-result
+      - name: Verify test artifact
+        run: |
+          echo "Downloaded test artifact:"
+          cat test-result.txt
       - name: Build application
         run: |
           mkdir build
